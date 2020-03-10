@@ -23,7 +23,8 @@ namespace HelloApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<AuthMiddleware>();
+                    webBuilder.UseStartup<StaticFiles>();
+                    webBuilder.UseWebRoot("static");
                 });
     }
 }

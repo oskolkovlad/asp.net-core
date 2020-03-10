@@ -63,6 +63,11 @@ namespace HelloApp
                 app.UseDeveloperExceptionPage();
             }
 
+            /*if (_env.IsEnvironment("Test")) // Если проект в состоянии "Test"
+            {
+                await context.Response.WriteAsync("В состоянии тестирования");
+            }*/
+
             // добавляем возможности маршрутизации
             app.UseRouting();
 
