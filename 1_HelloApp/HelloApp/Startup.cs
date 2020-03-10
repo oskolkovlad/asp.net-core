@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -46,6 +42,20 @@ namespace HelloApp
         // позволяет получить информацию о среде, в которой запускается приложение, и взаимодействовать с ней.
         public void Configure(IApplicationBuilder app/*, IWebHostEnvironment env*/)
         {
+            // Компоненты middleware конфигурируются с помощью методов расширений Run, Map и Use объекта IApplicationBuilder,
+            // который передается в метод Configure() класса Startup. Каждый компонент может быть определен
+            // как анонимный метод (встроенный inline компонент), либо может быть вынесен в отдельный класс.
+
+
+            // Все вызовы типа app.UseXXX как раз и представляют собой добавление компонентов middleware для обработки запроса.
+            // То есть у нас получается примерно следующий конвейер обработки:
+
+            // - Компонент обработки ошибок - Diagnostics. Добавляется через app.UseDeveloperExceptionPage()
+            // - Компонент маршрутизации - EndpointRoutingMiddleware. Добавляется через app.UseRouting()
+            // - Компонент EndpointMiddleware, который отправляет ответ, если запрос пришел по
+            // маршруту "/" (то есть пользователь обратился к корню веб-приложения). Добавляется через метод app.UseEndpoints()
+
+
             // если приложение в процессе разработки
             if (_env.IsDevelopment())
             {
@@ -56,14 +66,21 @@ namespace HelloApp
             // добавляем возможности маршрутизации
             app.UseRouting();
 
+            int x = 2;
             // устанавливаем адреса, которые будут обрабатываться
             app.UseEndpoints(endpoints =>
             {
                 // обработка запроса - получаем констекст запроса в виде объекта context
                 endpoints.MapGet("/", async context =>
                 {
+                    x *= x;
                     // отправка ответа в виде строки "Hello World!"
                     await context.Response.WriteAsync($"Application name: {_env.ApplicationName}");
+                    await context.Response.WriteAsync($"\nResult: {x}");
+
+                    // Также стоит отметить, что браузер Google Chrome может посылать два запроса - один собственно к приложению,
+                    // а другой - к файлу иконки favicon.ico,поэтому в Google Chrome результат может отличаться не 2 раза,
+                    // а гораздо больше.
                 });
             });
         }
