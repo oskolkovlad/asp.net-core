@@ -23,7 +23,7 @@ namespace HelloApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<CreateOwnMiddleware>();
+                    webBuilder.UseStartup<AuthMiddleware>();
                 });
     }
 }
