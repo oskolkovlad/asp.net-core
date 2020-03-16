@@ -24,7 +24,7 @@ namespace HelloApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<StaticFiles>();
-                    webBuilder.UseWebRoot("static");
+                    //webBuilder.UseWebRoot("static");
                 });
     }
 }
